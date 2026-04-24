@@ -99,6 +99,30 @@
       <div class="wb-icon-label">Trashcan</div>
     </div>
 
+    <!-- DUNE Game Icon -->
+    <div class="wb-icon" id="icon-dune" style="left:20px; top:400px;" ondblclick="openWindow('dune-window')">
+      <div class="wb-icon-image">
+        <svg width="44" height="44" viewBox="0 0 44 44">
+          <!-- Disk body -->
+          <rect x="0" y="4" width="44" height="36" fill="#C8A040" stroke="#000000" stroke-width="1"/>
+          <rect x="0" y="0" width="44" height="8" fill="#000000"/>
+          <rect x="16" y="1" width="12" height="6" fill="#FF6600"/>
+          <!-- Desert scene on label -->
+          <rect x="3" y="12" width="38" height="24" fill="#8A5010" stroke="#000000" stroke-width="1"/>
+          <!-- Twin suns -->
+          <circle cx="10" cy="17" r="3" fill="#FFD700"/>
+          <circle cx="17" cy="15" r="2" fill="#FFA040"/>
+          <!-- Sand dune silhouette -->
+          <path d="M3 36 Q12 26 20 32 Q28 24 38 28 L38 36 Z" fill="#C88020"/>
+          <!-- Sandworm hint -->
+          <path d="M8 30 Q16 26 24 28 Q32 24 40 27" stroke="#FF6600" stroke-width="2" fill="none"/>
+          <!-- DUNE text -->
+          <text x="22" y="21" text-anchor="middle" font-family="monospace" font-size="7" font-weight="bold" fill="#FFD700">DUNE</text>
+        </svg>
+      </div>
+      <div class="wb-icon-label">Dune</div>
+    </div>
+
     <!-- Windows -->
     <div class="wb-window" id="workbench-window" style="left:80px; top:30px; width:500px; height:340px; display:none;">
       <div class="wb-window-title-bar">
@@ -279,6 +303,19 @@
       <div class="wb-window-resize-gadget" data-window="about-window"></div>
     </div>
 
+    <!-- DUNE game window -->
+    <div class="wb-window" id="dune-window" style="left:100px; top:20px; width:680px; height:480px; display:none;">
+      <div class="wb-window-title-bar">
+        <div class="wb-gadget wb-close-gadget" onclick="closeWindow('dune-window')" title="Close"></div>
+        <div class="wb-window-title">DUNE — Cryo Interactive 1992</div>
+        <div class="wb-gadget wb-depth-gadget" onclick="depthWindow('dune-window')" title="Depth"></div>
+      </div>
+      <div class="wb-window-content" style="padding:0; overflow:hidden;">
+        <iframe src="dune/index.html" style="width:100%; height:100%; border:none; display:block;" id="dune-iframe"></iframe>
+      </div>
+      <div class="wb-window-resize-gadget" data-window="dune-window"></div>
+    </div>
+
   </div>
 
   <!-- Menus overlay -->
@@ -293,6 +330,8 @@
       <div class="wb-menu-item" onclick="openWindow('cli-window'); closeMenus()">Shell</div>
       <div class="wb-menu-divider"></div>
       <div class="wb-menu-item wb-menu-disabled">Empty Trash</div>
+      <div class="wb-menu-divider"></div>
+      <div class="wb-menu-item" onclick="openWindow('dune-window'); closeMenus()">Play Dune</div>
     </div>
   </div>
 

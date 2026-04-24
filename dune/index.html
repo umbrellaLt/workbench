@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DUNE</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="game-wrap">
+
+  <!-- HUD bar (always visible except title) -->
+  <div id="hud" class="hidden">
+    <span id="hud-day">Day 1</span>
+    <span id="hud-spice">⬡ Spice: 0</span>
+    <span id="hud-demand">Demand: 80</span>
+    <span id="hud-military">⚔ Military: 0</span>
+    <span id="hud-phase"></span>
+  </div>
+
+  <!-- ============ TITLE SCREEN ============ -->
+  <div id="screen-title" class="screen">
+    <div id="title-stars"></div>
+    <div id="title-suns">
+      <div class="sun sun1"></div>
+      <div class="sun sun2"></div>
+    </div>
+    <div id="title-desert"></div>
+    <div id="title-content">
+      <div id="title-logo">
+        <div id="title-dune">DUNE</div>
+        <div id="title-sub">The Game &mdash; Arrakis, the Desert Planet</div>
+        <div id="title-credit">Based on Frank Herbert's novel &bull; Cryo Interactive 1992</div>
+      </div>
+      <button class="dune-btn" onclick="Game.start()">Begin your journey</button>
+    </div>
+  </div>
+
+  <!-- ============ INTRO / CUTSCENE ============ -->
+  <div id="screen-intro" class="screen hidden">
+    <div id="intro-bg"></div>
+    <div id="intro-box">
+      <div id="intro-text"></div>
+      <button class="dune-btn" id="intro-next" onclick="Game.introNext()">Continue</button>
+    </div>
+  </div>
+
+  <!-- ============ PALACE SCREEN ============ -->
+  <div id="screen-palace" class="screen hidden">
+    <div id="palace-bg">
+      <div id="palace-ceiling"></div>
+      <div id="palace-floor"></div>
+      <div id="palace-pillars">
+        <div class="pillar"></div>
+        <div class="pillar"></div>
+        <div class="pillar"></div>
+      </div>
+    </div>
+    <div id="palace-title">Arrakeen Fortress &mdash; <span id="palace-room-name">Great Hall</span></div>
+    <div id="palace-characters"></div>
+    <div id="palace-nav">
+      <button class="dune-btn-sm" onclick="Game.goMap()">✈ Fly to Desert</button>
+      <button class="dune-btn-sm" onclick="Game.goCommand()">⊞ Command Center</button>
+      <button class="dune-btn-sm" onclick="Game.endDay()">☀ End Day</button>
+    </div>
+  </div>
+
+  <!-- ============ DIALOG SCREEN ============ -->
+  <div id="screen-dialog" class="screen hidden">
+    <div id="dialog-bg"></div>
+    <div id="dialog-portrait-wrap">
+      <div id="dialog-portrait"></div>
+      <div id="dialog-char-name"></div>
+      <div id="dialog-char-title"></div>
+    </div>
+    <div id="dialog-content">
+      <div id="dialog-text"></div>
+      <div id="dialog-choices"></div>
+    </div>
+  </div>
+
+  <!-- ============ MAP SCREEN ============ -->
+  <div id="screen-map" class="screen hidden">
+    <div id="map-title">Arrakis &mdash; <span id="map-location-name">Arrakeen</span></div>
+    <div id="map-wrap">
+      <canvas id="map-canvas" width="480" height="292"></canvas>
+      <div id="map-tooltip"></div>
+    </div>
+    <div id="map-legend">
+      <span>&#9632; Arrakeen</span>
+      <span>&#9650; Sietch</span>
+      <span>&#9632; Harkonnen</span>
+      <span id="map-fuel">Ornithopter fuel: <b id="fuel-val">5</b> days</span>
+    </div>
+    <div id="map-nav">
+      <button class="dune-btn-sm" onclick="Game.goPalace()">◀ Return to Palace</button>
+    </div>
+  </div>
+
+  <!-- ============ SIETCH SCREEN ============ -->
+  <div id="screen-sietch" class="screen hidden">
+    <div id="sietch-bg"></div>
+    <div id="sietch-header">
+      <div id="sietch-name-title"></div>
+      <div id="sietch-leader-line"></div>
+    </div>
+    <div id="sietch-main">
+      <div id="sietch-portrait-wrap">
+        <div id="sietch-portrait"></div>
+        <div id="sietch-dialog-text"></div>
+      </div>
+      <div id="sietch-stats">
+        <div class="stat-row"><span>Fremen Warriors</span><span id="sstat-fremen">0</span></div>
+        <div class="stat-row"><span>Assigned Mining</span><span id="sstat-mining">0</span></div>
+        <div class="stat-row"><span>Assigned Military</span><span id="sstat-military">0</span></div>
+        <div class="stat-row"><span>Daily Spice</span><span id="sstat-spice">0 kg</span></div>
+        <hr>
+        <div id="sietch-assign-section">
+          <div class="assign-row">
+            <span>Mining</span>
+            <button class="adj-btn" onclick="Game.adjustSietch('mining',-10)">−</button>
+            <span id="assign-mining-val">0</span>
+            <button class="adj-btn" onclick="Game.adjustSietch('mining',10)">+</button>
+          </div>
+          <div class="assign-row">
+            <span>Military</span>
+            <button class="adj-btn" onclick="Game.adjustSietch('military',-10)">−</button>
+            <span id="assign-military-val">0</span>
+            <button class="adj-btn" onclick="Game.adjustSietch('military',10)">+</button>
+          </div>
+          <div class="assign-note">Remaining idle: <span id="assign-idle">0</span></div>
+        </div>
+      </div>
+    </div>
+    <div id="sietch-nav">
+      <button class="dune-btn-sm" onclick="Game.goMap()">◀ Back to Map</button>
+      <button class="dune-btn-sm" onclick="Game.goPalace()">⌂ Palace</button>
+    </div>
+  </div>
+
+  <!-- ============ COMMAND SCREEN ============ -->
+  <div id="screen-command" class="screen hidden">
+    <div id="command-title">Command Center &mdash; Day <span id="cmd-day">1</span></div>
+    <div id="command-main">
+      <div id="command-resources">
+        <div class="res-block">
+          <div class="res-label">Spice Stockpile</div>
+          <div class="res-val" id="cmd-spice">0</div>
+        </div>
+        <div class="res-block">
+          <div class="res-label">Emperor's Demand</div>
+          <div class="res-val" id="cmd-demand">80</div>
+        </div>
+        <div class="res-block">
+          <div class="res-label">Daily Production</div>
+          <div class="res-val" id="cmd-production">0</div>
+        </div>
+        <div class="res-block">
+          <div class="res-label">Military Strength</div>
+          <div class="res-val" id="cmd-military">0</div>
+        </div>
+        <div class="res-block">
+          <div class="res-label">Harkonnen Strength</div>
+          <div class="res-val danger" id="cmd-harkonnen">100</div>
+        </div>
+      </div>
+      <div id="command-bars">
+        <div class="bar-row">
+          <span>Spice vs Demand</span>
+          <div class="bar-track"><div id="bar-spice" class="bar-fill bar-spice"></div></div>
+        </div>
+        <div class="bar-row">
+          <span>Military vs Harkonnen</span>
+          <div class="bar-track"><div id="bar-military" class="bar-fill bar-military"></div></div>
+        </div>
+      </div>
+      <div id="command-sietches">
+        <table id="sietch-table">
+          <thead>
+            <tr><th>Sietch</th><th>Leader</th><th>Fremen</th><th>Mining</th><th>Military</th><th>Prod/day</th></tr>
+          </thead>
+          <tbody id="sietch-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div id="command-nav">
+      <button class="dune-btn-sm" onclick="Game.goPalace()">◀ Palace</button>
+      <button class="dune-btn-sm" onclick="Game.goMap()">✈ Map</button>
+      <button class="dune-btn" onclick="Game.endDay()">☀ End Day</button>
+    </div>
+  </div>
+
+  <!-- ============ REPORT SCREEN ============ -->
+  <div id="screen-report" class="screen hidden">
+    <div id="report-title">End of Day <span id="rep-day">1</span> Report</div>
+    <div id="report-content">
+      <div id="report-events"></div>
+    </div>
+    <button class="dune-btn" onclick="Game.afterReport()">Continue</button>
+  </div>
+
+  <!-- ============ BATTLE SCREEN ============ -->
+  <div id="screen-battle" class="screen hidden">
+    <div id="battle-bg"></div>
+    <div id="battle-content">
+      <div id="battle-title">⚔ Harkonnen Attack!</div>
+      <div id="battle-desc"></div>
+      <div id="battle-bars">
+        <div class="battle-bar-row">
+          <span>Fremen Forces</span>
+          <div class="bar-track"><div id="battle-bar-fremen" class="bar-fill bar-military"></div></div>
+          <span id="battle-fremen-val">0</span>
+        </div>
+        <div class="battle-bar-row">
+          <span>Harkonnen Forces</span>
+          <div class="bar-track"><div id="battle-bar-hark" class="bar-fill bar-danger"></div></div>
+          <span id="battle-hark-val">100</span>
+        </div>
+      </div>
+      <div id="battle-result"></div>
+      <button class="dune-btn" id="battle-btn" onclick="Game.resolveBattle()">Fight!</button>
+    </div>
+  </div>
+
+  <!-- ============ WIN SCREEN ============ -->
+  <div id="screen-win" class="screen hidden">
+    <div id="win-bg"></div>
+    <div id="win-content">
+      <div id="win-title">Victory!</div>
+      <div id="win-subtitle">Muad'Dib leads the Fremen to triumph</div>
+      <div id="win-text"></div>
+      <button class="dune-btn" onclick="Game.restart()">Play Again</button>
+    </div>
+  </div>
+
+  <!-- ============ GAME OVER SCREEN ============ -->
+  <div id="screen-gameover" class="screen hidden">
+    <div id="gameover-bg"></div>
+    <div id="gameover-content">
+      <div id="gameover-title">The Desert Claims You</div>
+      <div id="gameover-text"></div>
+      <div id="gameover-stats"></div>
+      <button class="dune-btn" onclick="Game.restart()">Try Again</button>
+    </div>
+  </div>
+
+</div>
+
+<script src="game.js"></script>
+</body>
+</html>

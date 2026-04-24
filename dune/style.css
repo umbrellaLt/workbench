@@ -1,0 +1,598 @@
+@import url('https://fonts.cdnfonts.com/css/topaz');
+
+/* ====================================================
+   DUNE — Amiga Cryo Interactive Web Remake
+   Color palette: sand, ochre, rust, midnight blue
+   ==================================================== */
+:root {
+  --sand:      #D4A843;
+  --sand-dark: #B88830;
+  --sand-light:#F0D080;
+  --rock:      #7A5030;
+  --rock-dark: #4A2E18;
+  --night:     #060D20;
+  --night2:    #0D1A40;
+  --spice:     #FF6600;
+  --spice2:    #FF9933;
+  --fremen:    #2288CC;
+  --danger:    #CC2200;
+  --text-main: #F0D080;
+  --text-dim:  #A08040;
+  --hud-bg:    #0A0A18;
+  --btn-bg:    #3A2A10;
+  --btn-hover: #6A4820;
+  --btn-border:#D4A843;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html, body {
+  width:100%; height:100%; overflow:hidden;
+  background: var(--night);
+  font-family: 'Topaz', 'Courier New', monospace;
+  color: var(--text-main);
+}
+
+#game-wrap {
+  width:100%; height:100%;
+  display:flex; flex-direction:column;
+  position:relative; overflow:hidden;
+}
+
+.hidden { display:none !important; }
+
+/* ====================================================
+   HUD
+   ==================================================== */
+#hud {
+  flex-shrink:0;
+  height: 26px;
+  background: var(--hud-bg);
+  border-bottom: 1px solid var(--sand-dark);
+  display:flex; align-items:center; gap:16px;
+  padding:0 10px;
+  font-size:11px; color: var(--text-main);
+  z-index:100;
+}
+#hud span { white-space:nowrap; }
+#hud-spice { color: var(--spice2); }
+#hud-military { color: var(--fremen); }
+#hud-phase { margin-left:auto; color: var(--text-dim); font-style:italic; }
+
+/* ====================================================
+   SCREENS (common)
+   ==================================================== */
+.screen {
+  flex:1; position:relative;
+  display:flex; flex-direction:column;
+  overflow:hidden;
+}
+
+/* ====================================================
+   TITLE SCREEN
+   ==================================================== */
+#screen-title {
+  background: var(--night);
+  align-items:center; justify-content:center;
+}
+
+#title-stars {
+  position:absolute; inset:0;
+  background:
+    radial-gradient(1px 1px at 10% 15%, #fff 0%, transparent 100%),
+    radial-gradient(1px 1px at 25% 5%,  #fff 0%, transparent 100%),
+    radial-gradient(1px 1px at 40% 20%, #fff 0%, transparent 100%),
+    radial-gradient(1px 1px at 55% 8%,  #fff 0%, transparent 100%),
+    radial-gradient(1px 1px at 70% 18%, #fff 0%, transparent 100%),
+    radial-gradient(1px 1px at 85% 12%, #fff 0%, transparent 100%),
+    radial-gradient(1px 1px at 92% 25%, #fff 0%, transparent 100%),
+    radial-gradient(1px 1px at 15% 35%, #fff 0%, transparent 100%),
+    radial-gradient(1px 1px at 78% 30%, #fff 0%, transparent 100%),
+    radial-gradient(1px 1px at 5%  28%, #fff 0%, transparent 100%);
+}
+
+#title-suns {
+  position:absolute; top:8%; left:0; right:0;
+  display:flex; justify-content:center; gap:80px;
+}
+.sun {
+  width:40px; height:40px; border-radius:50%;
+  box-shadow: 0 0 20px 6px currentColor;
+}
+.sun1 { background:#FFD700; color:#FFD700; opacity:.9; }
+.sun2 { background:#FFA040; color:#FFA040; opacity:.7; width:28px; height:28px; margin-top:10px; }
+
+#title-desert {
+  position:absolute; bottom:0; left:0; right:0; height:35%;
+  background: linear-gradient(to bottom, var(--sand-dark) 0%, var(--rock-dark) 100%);
+  clip-path: polygon(0 40%, 8% 30%, 15% 45%, 25% 20%, 35% 40%, 45% 25%, 55% 42%, 65% 18%, 75% 38%, 85% 22%, 95% 36%, 100% 25%, 100% 100%, 0 100%);
+}
+
+#title-content {
+  position:relative; z-index:10;
+  text-align:center; display:flex; flex-direction:column; align-items:center; gap:20px;
+}
+
+#title-dune {
+  font-size:72px; font-weight:bold; letter-spacing:20px;
+  color: var(--sand);
+  text-shadow: 0 0 40px var(--spice), 0 0 80px var(--spice2), 4px 4px 0 var(--rock-dark);
+  animation: titlePulse 3s ease-in-out infinite;
+}
+@keyframes titlePulse {
+  0%,100% { text-shadow: 0 0 40px var(--spice), 0 0 80px var(--spice2), 4px 4px 0 var(--rock-dark); }
+  50%      { text-shadow: 0 0 60px var(--spice), 0 0 120px var(--spice2), 4px 4px 0 var(--rock-dark); }
+}
+
+#title-sub {
+  font-size:14px; color: var(--text-dim); letter-spacing:3px;
+  text-transform:uppercase;
+}
+#title-credit { font-size:10px; color:#604820; }
+
+/* ====================================================
+   BUTTONS
+   ==================================================== */
+.dune-btn {
+  background: var(--btn-bg);
+  border: 2px solid var(--btn-border);
+  color: var(--sand);
+  font-family: inherit; font-size:13px;
+  padding: 7px 22px; cursor:pointer;
+  letter-spacing:1px; text-transform:uppercase;
+  transition: background .15s;
+}
+.dune-btn:hover { background: var(--btn-hover); }
+.dune-btn:active { background: var(--sand); color: var(--rock-dark); }
+
+.dune-btn-sm {
+  background: transparent;
+  border: 1px solid var(--sand-dark);
+  color: var(--text-dim);
+  font-family:inherit; font-size:11px;
+  padding: 4px 10px; cursor:pointer;
+  text-transform:uppercase; letter-spacing:1px;
+}
+.dune-btn-sm:hover { border-color: var(--sand); color: var(--sand); }
+
+/* ====================================================
+   INTRO SCREEN
+   ==================================================== */
+#screen-intro {
+  align-items:center; justify-content:center;
+  background: var(--night);
+}
+#intro-bg {
+  position:absolute; inset:0;
+  background: radial-gradient(ellipse at 50% 80%, var(--rock-dark) 0%, var(--night) 70%);
+}
+#intro-box {
+  position:relative; z-index:5;
+  max-width:520px; width:90%;
+  background: rgba(10,8,4,.88);
+  border: 1px solid var(--sand-dark);
+  padding: 30px 36px;
+  display:flex; flex-direction:column; align-items:center; gap:20px;
+}
+#intro-text {
+  font-size:13px; line-height:1.8;
+  color: var(--text-main); text-align:center;
+  min-height:80px;
+}
+
+/* ====================================================
+   PALACE SCREEN
+   ==================================================== */
+#palace-bg {
+  position:absolute; inset:0; overflow:hidden;
+}
+#palace-ceiling {
+  position:absolute; top:0; left:0; right:0; height:35%;
+  background: linear-gradient(to bottom, #1A1008 0%, #2A1C0E 100%);
+}
+#palace-floor {
+  position:absolute; bottom:0; left:0; right:0; height:35%;
+  background: linear-gradient(to top, #0E0906 0%, #1C1208 80%, transparent 100%);
+}
+#palace-pillars {
+  position:absolute; inset:0;
+  display:flex; justify-content:space-around; align-items:stretch;
+  pointer-events:none;
+}
+.pillar {
+  width:28px;
+  background: linear-gradient(to right, #1A0E06 0%, #3A2010 30%, #1A0E06 100%);
+  opacity:.7;
+}
+
+#palace-title {
+  position:relative; z-index:5;
+  padding: 6px 14px;
+  font-size:11px; color: var(--text-dim);
+  border-bottom: 1px solid #2A1C0E;
+  background: rgba(10,6,2,.7);
+  text-transform:uppercase; letter-spacing:2px;
+}
+
+#palace-characters {
+  position:relative; z-index:5;
+  flex:1; display:flex; align-items:center; justify-content:center;
+  gap:20px; flex-wrap:wrap; padding:10px;
+}
+
+.char-card {
+  display:flex; flex-direction:column; align-items:center;
+  gap:6px; cursor:pointer;
+  transition:transform .15s;
+}
+.char-card:hover { transform:translateY(-4px); }
+
+.char-portrait {
+  width:72px; height:90px;
+  border: 2px solid var(--sand-dark);
+  display:flex; align-items:flex-end; justify-content:center;
+  font-size:28px; overflow:hidden; position:relative;
+  background: linear-gradient(to bottom, #1A1008 0%, #2A1810 100%);
+}
+.char-portrait::before {
+  content:''; position:absolute; inset:0;
+  background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,.5) 100%);
+}
+.char-initials {
+  position:absolute; top:8px; left:50%; transform:translateX(-50%);
+  font-size:28px; font-weight:bold; opacity:.9;
+}
+.char-name  { font-size:11px; color:var(--sand); text-align:center; text-transform:uppercase; letter-spacing:1px; }
+.char-role  { font-size:9px; color:var(--text-dim); text-align:center; }
+
+.char-card.unavailable { opacity:.3; cursor:not-allowed; pointer-events:none; }
+
+#palace-nav {
+  position:relative; z-index:5;
+  padding: 8px 12px;
+  display:flex; gap:10px; justify-content:center;
+  background: rgba(10,6,2,.8);
+  border-top: 1px solid #2A1C0E;
+}
+
+/* ====================================================
+   DIALOG SCREEN
+   ==================================================== */
+#screen-dialog {
+  flex-direction:row; align-items:stretch;
+}
+#dialog-bg {
+  position:absolute; inset:0;
+  background: linear-gradient(135deg, #0A0604 0%, #1A1008 50%, #0E0806 100%);
+}
+
+#dialog-portrait-wrap {
+  position:relative; z-index:5;
+  width:160px; flex-shrink:0;
+  display:flex; flex-direction:column; align-items:center;
+  justify-content:flex-start; padding:16px 10px;
+  border-right: 1px solid #2A1C0E;
+  background: rgba(0,0,0,.4);
+}
+
+#dialog-portrait {
+  width:130px; height:160px;
+  border: 2px solid var(--sand-dark);
+  display:flex; align-items:center; justify-content:center;
+  font-size:60px;
+  background: linear-gradient(to bottom, #1A1008, #2A1810);
+  position:relative; overflow:hidden;
+}
+#dialog-portrait::after {
+  content:''; position:absolute; inset:0;
+  background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,.6) 100%);
+}
+#dialog-char-name  { margin-top:10px; font-size:13px; color:var(--sand); text-align:center; font-weight:bold; }
+#dialog-char-title { font-size:10px; color:var(--text-dim); text-align:center; margin-top:3px; }
+
+#dialog-content {
+  position:relative; z-index:5;
+  flex:1; display:flex; flex-direction:column;
+  padding:20px; gap:16px;
+}
+
+#dialog-text {
+  flex:1;
+  font-size:13px; line-height:1.8; color:var(--text-main);
+  border: 1px solid #2A1C0E;
+  padding:16px; background: rgba(0,0,0,.5);
+  overflow-y:auto;
+}
+
+#dialog-choices {
+  display:flex; flex-direction:column; gap:6px;
+}
+.dialog-choice {
+  background: transparent;
+  border: 1px solid var(--sand-dark);
+  color: var(--text-dim);
+  font-family:inherit; font-size:12px;
+  padding:5px 12px; cursor:pointer; text-align:left;
+}
+.dialog-choice:hover { background: var(--btn-bg); color:var(--sand); border-color:var(--sand); }
+
+/* ====================================================
+   MAP SCREEN
+   ==================================================== */
+#screen-map { background: var(--night); }
+
+#map-title {
+  padding: 6px 14px;
+  font-size:11px; color:var(--text-dim);
+  border-bottom: 1px solid #1A1208;
+  text-transform:uppercase; letter-spacing:2px;
+  background:rgba(0,0,0,.6);
+}
+
+#map-wrap {
+  flex:1; display:flex; align-items:center; justify-content:center;
+  position:relative;
+}
+
+#map-canvas {
+  border: 2px solid var(--sand-dark);
+  cursor:crosshair;
+  max-width:100%; max-height:100%;
+  image-rendering:pixelated;
+}
+
+#map-tooltip {
+  position:absolute; pointer-events:none;
+  background:rgba(10,6,2,.92); border:1px solid var(--sand-dark);
+  color:var(--sand); font-size:11px; padding:4px 8px;
+  display:none; white-space:nowrap;
+  top:10px; left:10px;
+}
+
+#map-legend {
+  padding:4px 14px;
+  font-size:10px; color:var(--text-dim);
+  display:flex; gap:16px; align-items:center;
+  background:rgba(0,0,0,.6); border-top:1px solid #1A1208;
+}
+#map-fuel { margin-left:auto; }
+
+#map-nav {
+  padding:6px 12px;
+  display:flex; gap:10px; justify-content:center;
+  background:rgba(0,0,0,.7); border-top:1px solid #1A1208;
+}
+
+/* ====================================================
+   SIETCH SCREEN
+   ==================================================== */
+#screen-sietch { background: var(--night); }
+
+#sietch-bg {
+  position:absolute; inset:0;
+  background: linear-gradient(to bottom, #100C04 0%, #1A1008 50%, #0E0A04 100%);
+}
+
+#sietch-header {
+  position:relative; z-index:5;
+  padding:8px 14px;
+  background:rgba(0,0,0,.7); border-bottom:1px solid var(--sand-dark);
+}
+#sietch-name-title { font-size:16px; color:var(--sand); font-weight:bold; letter-spacing:2px; }
+#sietch-leader-line { font-size:10px; color:var(--text-dim); margin-top:2px; }
+
+#sietch-main {
+  position:relative; z-index:5;
+  flex:1; display:flex; gap:0; overflow:hidden;
+}
+
+#sietch-portrait-wrap {
+  width:220px; flex-shrink:0;
+  padding:14px; display:flex; flex-direction:column; gap:12px;
+  border-right:1px solid #1A1208;
+}
+
+#sietch-portrait {
+  width:180px; height:200px;
+  border:2px solid var(--sand-dark);
+  background: linear-gradient(to bottom, #1A1008, #2A1810);
+  display:flex; align-items:center; justify-content:center;
+  font-size:70px; position:relative; overflow:hidden;
+}
+#sietch-portrait::after {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(to bottom, transparent 50%, rgba(0,0,0,.6) 100%);
+}
+
+#sietch-dialog-text {
+  font-size:12px; color:var(--text-main); line-height:1.7;
+  border:1px solid #2A1C0E; padding:10px;
+  background:rgba(0,0,0,.5);
+  flex:1; overflow-y:auto;
+}
+
+#sietch-stats {
+  flex:1; padding:14px;
+  display:flex; flex-direction:column; gap:8px;
+}
+
+.stat-row {
+  display:flex; justify-content:space-between; align-items:center;
+  font-size:12px; padding:4px 0;
+  border-bottom:1px solid #1A1208;
+  color:var(--text-dim);
+}
+.stat-row span:last-child { color:var(--sand); font-weight:bold; }
+
+#sietch-assign-section { margin-top:8px; }
+.assign-row {
+  display:flex; align-items:center; gap:10px; margin-bottom:8px;
+  font-size:12px; color:var(--text-main);
+}
+.assign-row span:first-child { width:60px; }
+#assign-mining-val, #assign-military-val { min-width:30px; text-align:center; color:var(--sand); }
+.assign-note { font-size:10px; color:var(--text-dim); margin-top:4px; }
+
+.adj-btn {
+  width:22px; height:22px;
+  background: var(--btn-bg); border:1px solid var(--sand-dark);
+  color:var(--sand); font-size:14px; cursor:pointer; font-family:inherit;
+  display:flex; align-items:center; justify-content:center;
+}
+.adj-btn:hover { background:var(--btn-hover); }
+
+hr { border:none; border-top:1px solid var(--sand-dark); margin:4px 0; }
+
+#sietch-nav {
+  position:relative; z-index:5;
+  padding:6px 12px; display:flex; gap:10px; justify-content:center;
+  background:rgba(0,0,0,.8); border-top:1px solid #1A1208;
+}
+
+/* ====================================================
+   COMMAND SCREEN
+   ==================================================== */
+#screen-command { background: var(--night); }
+
+#command-title {
+  padding:6px 14px; font-size:11px; color:var(--text-dim);
+  text-transform:uppercase; letter-spacing:2px;
+  background:rgba(0,0,0,.6); border-bottom:1px solid #1A1208;
+}
+
+#command-main {
+  flex:1; display:flex; flex-direction:column; gap:10px;
+  padding:10px 14px; overflow-y:auto;
+}
+
+#command-resources {
+  display:flex; gap:10px; flex-wrap:wrap;
+}
+.res-block {
+  flex:1; min-width:90px;
+  background:rgba(0,0,0,.5); border:1px solid #2A1C0E;
+  padding:8px; text-align:center;
+}
+.res-label { font-size:9px; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px; }
+.res-val { font-size:20px; color:var(--sand); font-weight:bold; margin-top:4px; }
+.res-val.danger { color:var(--danger); }
+
+#command-bars { display:flex; flex-direction:column; gap:6px; }
+.bar-row { display:flex; align-items:center; gap:10px; font-size:10px; color:var(--text-dim); }
+.bar-row span { width:140px; text-align:right; }
+.bar-track { flex:1; height:12px; background:#1A1208; border:1px solid #2A1C0E; }
+.bar-fill { height:100%; transition:width .5s; }
+.bar-spice { background:var(--spice); }
+.bar-military { background:var(--fremen); }
+.bar-danger { background:var(--danger); }
+
+#command-sietches { flex:1; overflow:auto; }
+#sietch-table { width:100%; border-collapse:collapse; font-size:11px; }
+#sietch-table th {
+  background:rgba(0,0,0,.6); color:var(--text-dim);
+  padding:5px 8px; text-align:left;
+  border-bottom:1px solid var(--sand-dark); font-weight:normal;
+  text-transform:uppercase; letter-spacing:1px; font-size:9px;
+}
+#sietch-table td {
+  padding:5px 8px; border-bottom:1px solid #1A1208;
+  color:var(--text-main);
+}
+#sietch-table tr:hover td { background:rgba(255,168,0,.06); cursor:pointer; }
+#sietch-table tr.undiscovered td { color:#2A1C0E; }
+
+#command-nav {
+  padding:6px 12px; display:flex; gap:10px; align-items:center; justify-content:center;
+  background:rgba(0,0,0,.8); border-top:1px solid #1A1208;
+}
+
+/* ====================================================
+   REPORT SCREEN
+   ==================================================== */
+#screen-report {
+  align-items:center; justify-content:center;
+  background: linear-gradient(to bottom, var(--night) 0%, var(--night2) 100%);
+}
+#report-title {
+  font-size:16px; color:var(--sand); letter-spacing:3px;
+  text-transform:uppercase; margin-bottom:16px;
+}
+#report-content {
+  width:90%; max-width:480px;
+  background:rgba(0,0,0,.6); border:1px solid var(--sand-dark);
+  padding:16px; margin-bottom:16px;
+  max-height:50vh; overflow-y:auto;
+}
+.report-event {
+  font-size:12px; color:var(--text-main); line-height:1.8;
+  padding:4px 0; border-bottom:1px solid #1A1208;
+}
+.report-event.good  { color:#88FF88; }
+.report-event.bad   { color:#FF8888; }
+.report-event.warn  { color:var(--spice2); }
+.report-event.info  { color:var(--fremen); }
+
+/* ====================================================
+   BATTLE SCREEN
+   ==================================================== */
+#screen-battle {
+  align-items:center; justify-content:center;
+  background: var(--night);
+}
+#battle-bg {
+  position:absolute; inset:0;
+  background: linear-gradient(135deg, #200800 0%, #0A0002 50%, #200800 100%);
+}
+#battle-content {
+  position:relative; z-index:5;
+  width:90%; max-width:480px;
+  background:rgba(0,0,0,.75); border:2px solid var(--danger);
+  padding:24px; display:flex; flex-direction:column; align-items:center; gap:16px;
+}
+#battle-title { font-size:22px; color:var(--danger); letter-spacing:3px; }
+#battle-desc  { font-size:12px; color:var(--text-main); text-align:center; line-height:1.7; }
+#battle-bars  { width:100%; display:flex; flex-direction:column; gap:10px; }
+.battle-bar-row { display:flex; align-items:center; gap:10px; font-size:11px; color:var(--text-dim); }
+.battle-bar-row span:first-child { width:130px; }
+.battle-bar-row span:last-child { width:30px; text-align:right; color:var(--sand); }
+#battle-result { font-size:13px; color:var(--sand); text-align:center; font-weight:bold; min-height:20px; }
+
+/* ====================================================
+   WIN SCREEN
+   ==================================================== */
+#screen-win {
+  align-items:center; justify-content:center;
+  background: var(--night);
+}
+#win-bg {
+  position:absolute; inset:0;
+  background: radial-gradient(ellipse at 50% 60%, #402800 0%, var(--night) 70%);
+}
+#win-content {
+  position:relative; z-index:5; text-align:center;
+  display:flex; flex-direction:column; align-items:center; gap:14px;
+  max-width:500px; padding:30px;
+}
+#win-title  { font-size:48px; color:var(--sand); letter-spacing:8px; text-shadow:0 0 30px var(--spice); }
+#win-subtitle { font-size:14px; color:var(--spice2); letter-spacing:2px; }
+#win-text   { font-size:12px; color:var(--text-main); line-height:1.8; }
+
+/* ====================================================
+   GAME OVER SCREEN
+   ==================================================== */
+#screen-gameover {
+  align-items:center; justify-content:center;
+  background: var(--night);
+}
+#gameover-bg {
+  position:absolute; inset:0;
+  background: radial-gradient(ellipse at 50% 30%, #200000 0%, #050005 70%);
+}
+#gameover-content {
+  position:relative; z-index:5; text-align:center;
+  display:flex; flex-direction:column; align-items:center; gap:14px;
+  max-width:500px; padding:30px;
+}
+#gameover-title { font-size:32px; color:var(--danger); letter-spacing:4px; }
+#gameover-text  { font-size:12px; color:var(--text-main); line-height:1.8; }
+#gameover-stats { font-size:11px; color:var(--text-dim); line-height:2; }
