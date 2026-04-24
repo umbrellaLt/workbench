@@ -1,0 +1,589 @@
+@import url('https://fonts.cdnfonts.com/css/topaz');
+
+/* Amiga Workbench 1.3 Color Palette */
+:root {
+  --wb-blue: #0055AA;
+  --wb-white: #FFFFFF;
+  --wb-black: #000000;
+  --wb-orange: #FF8800;
+  --wb-titlebar-bg: #FF8800;
+  --wb-titlebar-stripe: #000000;
+  --wb-border-light: #FFFFFF;
+  --wb-border-dark: #000000;
+  --wb-desktop-bg: #0055AA;
+  --wb-window-bg: #AAAAAA;
+  --wb-gadget-size: 14px;
+}
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--wb-desktop-bg);
+  font-family: 'Topaz', 'Courier New', Courier, monospace;
+  font-size: 13px;
+  cursor: default;
+}
+
+/* ============================================================
+   SCREEN TITLE BAR
+   ============================================================ */
+#screen-title-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 18px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--wb-orange) 0px,
+    var(--wb-orange) 4px,
+    var(--wb-black) 4px,
+    var(--wb-black) 8px
+  );
+  display: flex;
+  align-items: center;
+  z-index: 9999;
+  border-bottom: 2px solid var(--wb-black);
+}
+
+#screen-drag-left {
+  width: 60px;
+  height: 100%;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--wb-orange) 0px,
+    var(--wb-orange) 4px,
+    var(--wb-black) 4px,
+    var(--wb-black) 8px
+  );
+}
+
+#screen-title {
+  flex: 1;
+  text-align: center;
+  color: var(--wb-white);
+  font-weight: bold;
+  font-size: 13px;
+  background: var(--wb-orange);
+  height: 100%;
+  line-height: 18px;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px 0 var(--wb-black);
+}
+
+#screen-clock {
+  padding: 0 8px;
+  color: var(--wb-white);
+  font-size: 12px;
+  font-weight: bold;
+  background: var(--wb-orange);
+  height: 100%;
+  line-height: 18px;
+  border-left: 2px solid var(--wb-black);
+  min-width: 70px;
+  text-align: center;
+}
+
+#screen-drag-right {
+  width: 40px;
+  height: 100%;
+}
+
+/* ============================================================
+   MENU BAR
+   ============================================================ */
+#menu-bar {
+  position: fixed;
+  top: 20px;
+  left: 0;
+  right: 0;
+  height: 18px;
+  background: var(--wb-white);
+  display: flex;
+  align-items: center;
+  z-index: 9000;
+  border-bottom: 1px solid var(--wb-black);
+}
+
+.menu-item {
+  padding: 0 12px;
+  height: 100%;
+  line-height: 18px;
+  font-size: 12px;
+  font-weight: bold;
+  color: var(--wb-black);
+  cursor: pointer;
+}
+
+.menu-item:hover,
+.menu-item.active {
+  background: var(--wb-black);
+  color: var(--wb-white);
+}
+
+/* ============================================================
+   DESKTOP
+   ============================================================ */
+#desktop {
+  position: fixed;
+  top: 38px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--wb-desktop-bg);
+  overflow: hidden;
+}
+
+/* ============================================================
+   ICONS
+   ============================================================ */
+.wb-icon {
+  position: absolute;
+  width: 60px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.wb-window .wb-icon {
+  position: relative;
+  display: inline-block;
+  margin: 8px;
+  vertical-align: top;
+}
+
+.wb-icon-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+}
+
+.wb-icon.selected .wb-icon-image svg rect:first-child,
+.wb-icon.selected .wb-icon-image svg circle:first-child {
+  fill: var(--wb-black);
+}
+
+.wb-icon.selected .wb-icon-image {
+  outline: 1px dotted var(--wb-white);
+}
+
+.wb-icon-label {
+  color: var(--wb-white);
+  font-size: 11px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 2px;
+  padding: 1px 3px;
+  white-space: nowrap;
+  background: transparent;
+}
+
+.wb-icon.selected .wb-icon-label {
+  background: var(--wb-black);
+  color: var(--wb-white);
+}
+
+.wb-window .wb-icon-label {
+  color: var(--wb-black);
+  background: transparent;
+}
+
+.wb-window .wb-icon.selected .wb-icon-label {
+  background: var(--wb-black);
+  color: var(--wb-white);
+}
+
+.wb-icon-small {
+  width: 50px;
+}
+
+/* ============================================================
+   WINDOWS
+   ============================================================ */
+.wb-window {
+  position: absolute;
+  min-width: 120px;
+  min-height: 80px;
+  border: 2px solid var(--wb-black);
+  box-shadow: 2px 2px 0 var(--wb-black);
+  z-index: 100;
+  background: var(--wb-window-bg);
+  display: flex;
+  flex-direction: column;
+}
+
+.wb-window.active {
+  z-index: 500;
+  box-shadow: 3px 3px 0 var(--wb-black);
+}
+
+/* Window title bar */
+.wb-window-title-bar {
+  display: flex;
+  align-items: center;
+  height: 18px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--wb-orange) 0px,
+    var(--wb-orange) 4px,
+    var(--wb-black) 4px,
+    var(--wb-black) 8px
+  );
+  border-bottom: 2px solid var(--wb-black);
+  cursor: grab;
+  flex-shrink: 0;
+}
+
+.wb-window-title-bar:active {
+  cursor: grabbing;
+}
+
+.wb-window-title {
+  flex: 1;
+  text-align: center;
+  color: var(--wb-white);
+  font-weight: bold;
+  font-size: 12px;
+  background: var(--wb-orange);
+  height: 100%;
+  line-height: 18px;
+  letter-spacing: 1px;
+  pointer-events: none;
+  text-shadow: 1px 1px 0 var(--wb-black);
+  padding: 0 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Gadgets (window buttons) */
+.wb-gadget {
+  width: var(--wb-gadget-size);
+  height: var(--wb-gadget-size);
+  flex-shrink: 0;
+  border: 2px solid var(--wb-black);
+  background: var(--wb-white);
+  cursor: pointer;
+  margin: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.wb-gadget:active {
+  background: var(--wb-black);
+}
+
+/* Close gadget - single square */
+.wb-close-gadget {
+  position: relative;
+}
+
+.wb-close-gadget::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border: 1px solid var(--wb-black);
+  background: var(--wb-white);
+}
+
+/* Depth gadget - overlapping squares */
+.wb-depth-gadget {
+  position: relative;
+  overflow: visible;
+}
+
+.wb-depth-gadget::before {
+  content: '';
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--wb-black);
+  background: var(--wb-white);
+  top: 0px;
+  left: 0px;
+}
+
+.wb-depth-gadget::after {
+  content: '';
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--wb-black);
+  background: var(--wb-orange);
+  top: 3px;
+  left: 3px;
+}
+
+/* Window content area */
+.wb-window-content {
+  flex: 1;
+  overflow: auto;
+  padding: 6px;
+  background: var(--wb-window-bg);
+  border: 2px inset var(--wb-white);
+}
+
+/* Resize gadget */
+.wb-window-resize-gadget {
+  width: 14px;
+  height: 14px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: var(--wb-white);
+  border-top: 2px solid var(--wb-black);
+  border-left: 2px solid var(--wb-black);
+  cursor: nwse-resize;
+}
+
+.wb-window-resize-gadget::after {
+  content: '';
+  position: absolute;
+  bottom: 1px;
+  right: 1px;
+  width: 6px;
+  height: 6px;
+  border-top: 2px solid var(--wb-black);
+  border-left: 2px solid var(--wb-black);
+}
+
+/* ============================================================
+   WINDOW CONTENT TYPES
+   ============================================================ */
+
+/* Empty directory */
+.wb-empty-dir {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #555;
+  font-size: 12px;
+  font-style: italic;
+}
+
+/* Shell / CLI */
+.wb-shell-content {
+  background: var(--wb-black) !important;
+  color: #AAFFAA;
+  font-family: 'Topaz', 'Courier New', Courier, monospace;
+  font-size: 12px;
+  padding: 4px !important;
+}
+
+#shell-output {
+  height: 100%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+#shell-output div {
+  line-height: 1.4;
+  white-space: pre;
+}
+
+.shell-prompt-line {
+  display: flex;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.shell-prompt {
+  color: var(--wb-orange);
+  white-space: nowrap;
+}
+
+.shell-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #AAFFAA;
+  font-family: 'Topaz', 'Courier New', Courier, monospace;
+  font-size: 12px;
+  caret-color: #AAFFAA;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Clock window */
+.wb-clock-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--wb-black) !important;
+  padding: 4px !important;
+}
+
+#clock-canvas {
+  display: block;
+}
+
+/* About window */
+.wb-about-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--wb-window-bg) !important;
+  text-align: center;
+}
+
+.about-text p {
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.wb-button {
+  background: var(--wb-white);
+  border: 2px solid var(--wb-black);
+  font-family: 'Topaz', 'Courier New', Courier, monospace;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 2px 20px;
+  cursor: pointer;
+  color: var(--wb-black);
+  box-shadow: 2px 2px 0 var(--wb-black);
+}
+
+.wb-button:active {
+  background: var(--wb-black);
+  color: var(--wb-white);
+  box-shadow: none;
+  transform: translate(2px, 2px);
+}
+
+/* ============================================================
+   MENUS
+   ============================================================ */
+#menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 8999;
+}
+
+#menu-overlay.active {
+  display: block;
+}
+
+#menus-container {
+  position: fixed;
+  top: 38px;
+  z-index: 9000;
+}
+
+.wb-menu {
+  position: absolute;
+  min-width: 180px;
+  background: var(--wb-white);
+  border: 2px solid var(--wb-black);
+  box-shadow: 3px 3px 0 var(--wb-black);
+}
+
+.wb-menu-item {
+  padding: 3px 12px;
+  font-size: 12px;
+  color: var(--wb-black);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.wb-menu-item:hover {
+  background: var(--wb-black);
+  color: var(--wb-white);
+}
+
+.wb-menu-item.wb-menu-disabled {
+  color: #888888;
+  cursor: default;
+}
+
+.wb-menu-item.wb-menu-disabled:hover {
+  background: var(--wb-white);
+  color: #888888;
+}
+
+.wb-menu-divider {
+  height: 1px;
+  background: var(--wb-black);
+  margin: 2px 0;
+}
+
+/* ============================================================
+   SCROLLBARS (Amiga style)
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--wb-window-bg);
+  border: 1px solid var(--wb-black);
+}
+
+::-webkit-scrollbar-thumb {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--wb-black),
+    var(--wb-black) 2px,
+    var(--wb-white) 2px,
+    var(--wb-white) 4px
+  );
+  border: 1px solid var(--wb-black);
+}
+
+::-webkit-scrollbar-button {
+  background: var(--wb-white);
+  border: 1px solid var(--wb-black);
+  display: block;
+  height: 14px;
+  width: 14px;
+}
+
+/* ============================================================
+   INACTIVE WINDOW (striped title bar)
+   ============================================================ */
+.wb-window:not(.active) .wb-window-title-bar {
+  background: repeating-linear-gradient(
+    90deg,
+    #888888 0px,
+    #888888 4px,
+    #555555 4px,
+    #555555 8px
+  );
+}
+
+.wb-window:not(.active) .wb-window-title {
+  background: #888888;
+  color: #CCCCCC;
+  text-shadow: none;
+}
+
+/* ============================================================
+   RESPONSIVE / MISC
+   ============================================================ */
+::selection {
+  background: var(--wb-orange);
+  color: var(--wb-black);
+}
+
+.no-select {
+  user-select: none;
+}
