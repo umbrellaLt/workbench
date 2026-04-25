@@ -577,6 +577,23 @@ html, body {
 }
 
 /* ============================================================
+   DESKTOP CREDIT
+   ============================================================ */
+#desktop-credit {
+  position: absolute;
+  left: 50%;
+  top: 60%;
+  transform: translate(-50%, -50%);
+  color: var(--wb-white);
+  font-family: 'Topaz', 'Courier New', Courier, monospace;
+  font-size: 13px;
+  font-weight: bold;
+  pointer-events: none;
+  text-shadow: 1px 1px 0 var(--wb-black);
+  white-space: nowrap;
+}
+
+/* ============================================================
    RESPONSIVE / MISC
    ============================================================ */
 ::selection {
